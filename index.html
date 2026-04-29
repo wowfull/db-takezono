@@ -129,9 +129,12 @@ function initials(name){ return (name||'?').replace(/[\s　]/g,'').slice(0,2); }
 
 function toDirectUrl(url) {
   if (!url) return '';
-  // Google Drive共有URLを直接表示URLに変換
-  const m = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-  if (m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
+  // /d/XXXX 形式
+  const m1 = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (m1) return `https://drive.google.com/uc?export=view&id=${m1[1]}`;
+  // open?id=XXXX 形式
+  const m2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (m2) return `https://drive.google.com/uc?export=view&id=${m2[1]}`;
   return url;
 }
 
