@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>外部人材データベース | 竹園高校 × ワオフル</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green:#1D9E75;--green-light:#E1F5EE;--green-mid:#5DCAA5;--green-dark:#0F6E56;
+  --bg:#F7F9F8;--white:#ffffff;--text:#1a1a1a;--text-sub:#6b7280;
+  --border:rgba(0,0,0,0.08);--radius:14px;--radius-sm:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+header{background:var(--white);border-bottom:1px solid var(--border);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.header-left{display:flex;align-items:center;gap:12px}
+.logo-mark{width:32px;height:32px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:18px;height:18px;fill:white}
+.header-title{font-size:15px;font-weight:700;color:var(--text)}
+.header-sub{font-size:11px;color:var(--text-sub);margin-top:1px}
+.badge{font-size:11px;background:var(--green-light);color:var(--green-dark);padding:4px 10px;border-radius:20px;font-weight:500}
+main{max-width:960px;margin:0 auto;padding:28px 20px}
+.search-row{display:flex;gap:10px;margin-bottom:16px}
+.search-wrap{flex:1;position:relative}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;opacity:0.4}
+input[type=text]{width:100%;padding:10px 14px 10px 38px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:'Noto Sans JP',sans-serif;background:var(--white);color:var(--text);outline:none;transition:border-color .15s}
+input[type=text]:focus{border-color:var(--green-mid)}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.f-btn{padding:6px 13px;border-radius:20px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--white);color:var(--text-sub);font-family:'Noto Sans JP',sans-serif;font-weight:500;transition:all .15s}
+.f-btn:hover{border-color:var(--green-mid)}
+.f-btn.active{background:var(--green-light);color:var(--green-dark);border-color:var(--green-mid)}
+.count-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.count-chip{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 14px;font-size:12px;color:var(--text-sub)}
+.count-chip strong{display:block;font-size:16px;color:var(--text);font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px;cursor:pointer;transition:all .18s}
+.card:hover{border-color:var(--green-mid);transform:translateY(-2px);box-shadow:0 6px 20px rgba(29,158,117,.1)}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;font-family:'DM Sans',sans-serif;flex-shrink:0}
+.cat-pill{font-size:10px;padding:3px 7px;border-radius:10px;font-weight:500;white-space:nowrap}
+.card-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px}
+.card-role{font-size:11px;color:var(--text-sub);margin-bottom:10px;line-height:1.5}
+.tag-row{display:flex;flex-wrap:wrap;gap:3px}
+.tag{font-size:10px;padding:3px 7px;border-radius:8px}
+.det-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center;padding:20px}
+.det-overlay.open{display:flex}
+.det-box{background:var(--white);border-radius:20px;max-width:540px;width:100%;max-height:85vh;overflow-y:auto;padding:28px;position:relative}
+.det-close{position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;font-size:20px;color:var(--text-sub);width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%}
+.det-close:hover{background:var(--bg)}
+.det-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.det-av{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;font-family:'DM Sans',sans-serif;flex-shrink:0}
+.det-name{font-size:20px;font-weight:700;color:var(--text);margin-bottom:3px}
+.det-role{font-size:13px;color:var(--text-sub);margin-bottom:6px}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--text-sub);margin:16px 0 6px;text-transform:uppercase}
+.bio-text{font-size:14px;color:var(--text);line-height:1.8}
+.genre-card{background:var(--bg);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px}
+.genre-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.genre-desc{font-size:12px;color:var(--text-sub);line-height:1.6}
+.apply-btn{display:block;width:100%;margin-top:18px;padding:13px;background:var(--green);color:white;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:background .15s}
+.apply-btn:hover{background:var(--green-dark)}
+.notice{background:#E6F1FB;border-radius:var(--radius-sm);padding:10px 13px;font-size:12px;color:#185FA5;margin-top:10px;line-height:1.6}
+.empty{text-align:center;padding:48px 0;color:var(--text-sub);font-size:14px}
+.loading{text-align:center;padding:48px 0;color:var(--text-sub);font-size:14px}
+.error-box{background:#FCEBEB;border-radius:var(--radius-sm);padding:14px;color:#A32D2D;font-size:13px;margin-bottom:16px;line-height:1.6}
+@media(max-width:600px){.grid{grid-template-columns:1fr 1fr}.count-row{display:none}main{padding:16px 14px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-left">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+    </div>
+    <div>
+      <div class="header-title">外部人材データベース</div>
+      <div class="header-sub">茨城県立竹園高校 × ワオフル株式会社</div>
+    </div>
+  </div>
+  <span class="badge" id="total-badge">読み込み中...</span>
+</header>
+
+<main>
+  <div id="error-area"></div>
+  <div class="count-row" id="count-row"></div>
+  <div class="search-row">
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search" placeholder="名前・テーマ・キーワードで検索...">
+    </div>
+  </div>
+  <div class="filters">
+    <button class="f-btn active" onclick="setFilter('all',this)">すべて</button>
+    <button class="f-btn" onclick="setFilter('ワオフル伴走先生',this)">ワオフル伴走先生</button>
+    <button class="f-btn" onclick="setFilter('竹園OB・OG',this)">竹園OB・OG</button>
+    <button class="f-btn" onclick="setFilter('地域・NPO',this)">地域・NPO</button>
+    <button class="f-btn" onclick="setFilter('大学・研究',this)">大学・研究</button>
+    <button class="f-btn" onclick="setFilter('PTA・保護者',this)">PTA・保護者</button>
+  </div>
+  <div id="grid-area"><div class="loading">データを読み込み中...</div></div>
+</main>
+
+<div class="det-overlay" id="overlay" onclick="closeDetail(event)">
+  <div class="det-box" id="det-box"></div>
+</div>
+
+<script>
+const SHEET_ID = '1G2tlHDRHa37-eMofffcYXqIskpf4xfghlhz066uW5XU';
+const SHEET_NAME = '登録データ';
+const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
+
+const CAT_STYLE = {
+  'ワオフル伴走先生':{bg:'#E1F5EE',tc:'#0F6E56'},
+  '竹園OB・OG':      {bg:'#E6F1FB',tc:'#185FA5'},
+  '地域・NPO':       {bg:'#FAEEDA',tc:'#854F0B'},
+  '大学・研究':      {bg:'#EEEDFE',tc:'#3C3489'},
+  'PTA・保護者':     {bg:'#FBEAF0',tc:'#993556'},
+};
+const DEFAULT_STYLE = {bg:'#F1EFE8',tc:'#5F5E5A'};
+
+let allData = [];
+let activeFilter = 'all';
+let searchQuery = '';
+
+function getStyle(cat){ return CAT_STYLE[cat] || DEFAULT_STYLE; }
+function initials(name){ return (name||'?').replace(/[\s　]/g,'').slice(0,2); }
+
+async function loadData(){
+  try {
+    const res = await fetch(API_URL);
+    const text = await res.text();
+    const json = JSON.parse(text.replace(/^[^(]+\(/, '').replace(/\);?\s*$/, ''));
+    const rows = json.table.rows;
+
+    // 列インデックスをラベルで特定（Googleフォーム連動シートはタイムスタンプが0列目）
+    const cols = json.table.cols.map(c => c.label);
+    console.log('列名:', cols);
+
+    const idx = {
+      name:  cols.findIndex(c => c.includes('表示名')),
+      cat:   cols.findIndex(c => c.includes('カテゴリ')),
+      role:  cols.findIndex(c => c.includes('肩書き')),
+      topics:cols.findIndex(c => c.includes('得意テーマ')),
+      bio:   cols.findIndex(c => c.includes('自己紹介')),
+      g1t:   cols.findIndex(c => c.includes('ジャンル①タイトル')),
+      g1d:   cols.findIndex(c => c.includes('ジャンル①詳細')),
+      g2t:   cols.findIndex(c => c.includes('ジャンル②タイトル')),
+      g2d:   cols.findIndex(c => c.includes('ジャンル②詳細')),
+    };
+
+    const get = (row, i) => i >= 0 && row.c[i] ? String(row.c[i].v || '').trim() : '';
+
+    allData = rows.map((r, i) => ({
+      id: String(i),
+      name:   get(r, idx.name),
+      cat:    get(r, idx.cat),
+      role:   get(r, idx.role),
+      topics: get(r, idx.topics).split(/[,、，]/).map(s=>s.trim()).filter(Boolean),
+      bio:    get(r, idx.bio),
+      g1t:    get(r, idx.g1t),
+      g1d:    get(r, idx.g1d),
+      g2t:    get(r, idx.g2t),
+      g2d:    get(r, idx.g2d),
+    })).filter(p => p.name);
+
+    renderCounts();
+    renderGrid();
+  } catch(e) {
+    console.error(e);
+    document.getElementById('error-area').innerHTML =
+      `<div class="error-box">データの読み込みに失敗しました。<br>
+      ・スプレッドシートの共有設定が「リンクを知っている全員・閲覧者」になっているか確認してください<br>
+      ・シート名が「登録データ」になっているか確認してください<br>
+      <small>エラー詳細: ${e.message}</small></div>`;
+    document.getElementById('grid-area').innerHTML = '';
+    document.getElementById('total-badge').textContent = 'エラー';
+  }
+}
+
+function getFiltered(){
+  return allData.filter(p => {
+    const catOk = activeFilter === 'all' || p.cat === activeFilter;
+    const q = searchQuery;
+    const qOk = !q || p.name.includes(q) || p.topics.join(' ').includes(q) ||
+                p.role.includes(q) || p.bio.includes(q);
+    return catOk && qOk;
+  });
+}
+
+function renderCounts(){
+  document.getElementById('total-badge').textContent = `${allData.length}名登録中`;
+  document.getElementById('count-row').innerHTML =
+    `<div class="count-chip"><strong>${allData.length}</strong>総登録数</div>` +
+    Object.keys(CAT_STYLE).map(c =>
+      `<div class="count-chip"><strong>${allData.filter(p=>p.cat===c).length}</strong>${c}</div>`
+    ).join('');
+}
+
+function renderGrid(){
+  const f = getFiltered();
+  const area = document.getElementById('grid-area');
+  if(!f.length){ area.innerHTML='<div class="empty">該当する人材が見つかりませんでした</div>'; return; }
+  area.className = 'grid';
+  area.innerHTML = f.map(p => {
+    const s = getStyle(p.cat);
+    return `<div class="card" onclick="openDetail('${p.id}')">
+      <div class="card-top">
+        <div class="avatar" style="background:${s.bg};color:${s.tc}">${initials(p.name)}</div>
+        <span class="cat-pill" style="background:${s.bg};color:${s.tc}">${p.cat||'未分類'}</span>
+      </div>
+      <div class="card-name">${p.name}</div>
+      <div class="card-role">${p.role}</div>
+      <div class="tag-row">${p.topics.map(t=>`<span class="tag" style="background:${s.bg};color:${s.tc}">${t}</span>`).join('')}</div>
+    </div>`;
+  }).join('');
+}
+
+function openDetail(id){
+  const p = allData.find(x => x.id === id); if(!p) return;
+  const s = getStyle(p.cat);
+  document.getElementById('det-box').innerHTML = `
+    <button class="det-close" onclick="document.getElementById('overlay').classList.remove('open')">✕</button>
+    <div class="det-head">
+      <div class="det-av" style="background:${s.bg};color:${s.tc}">${initials(p.name)}</div>
+      <div>
+        <div class="det-name">${p.name}</div>
+        <div class="det-role">${p.role}</div>
+        <span class="cat-pill" style="background:${s.bg};color:${s.tc}">${p.cat}</span>
+      </div>
+    </div>
+    <div class="tag-row" style="margin-bottom:4px">${p.topics.map(t=>`<span class="tag" style="background:${s.bg};color:${s.tc}">${t}</span>`).join('')}</div>
+    <div class="sec-label">自己紹介</div>
+    <p class="bio-text">${p.bio}</p>
+    ${p.g1t ? `<div class="sec-label">得意ジャンル</div>
+      <div class="genre-card"><div class="genre-title">${p.g1t}</div><div class="genre-desc">${p.g1d}</div></div>` : ''}
+    ${p.g2t ? `<div class="genre-card"><div class="genre-title">${p.g2t}</div><div class="genre-desc">${p.g2d}</div></div>` : ''}
+    <button class="apply-btn" onclick="alert('担当の先生に「${p.name}さんと話したい」と伝えてください！')">担当の先生に申請する</button>
+    <div class="notice">面談の日程調整は担当教員を通じてワオフルが行います。申請後1週間以内に連絡があります。</div>
+  `;
+  document.getElementById('overlay').classList.add('open');
+}
+
+function closeDetail(e){
+  if(e.target === document.getElementById('overlay'))
+    document.getElementById('overlay').classList.remove('open');
+}
+
+function setFilter(cat, btn){
+  activeFilter = cat;
+  document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('search').value = '';
+  searchQuery = '';
+  renderGrid();
+}
+
+document.getElementById('search').addEventListener('input', e => {
+  searchQuery = e.target.value;
+  renderGrid();
+});
+
+loadData();
+</script>
+</body>
+</html>
