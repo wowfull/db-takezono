@@ -6,124 +6,135 @@
 <title>探究人材データベース | 茨城県立竹園高校</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --green:#1D9E75;--green-light:#E1F5EE;--green-mid:#5DCAA5;--green-dark:#0F6E56;
-  --bg:#F7F9F8;--white:#ffffff;--text:#1a1a1a;--text-sub:#6b7280;
-  --border:rgba(0,0,0,0.08);--radius:14px;--radius-sm:8px;
-}
+:root{--green:#1D9E75;--green-light:#E1F5EE;--green-mid:#5DCAA5;--green-dark:#0F6E56;--bg:#F7F9F8;--white:#fff;--text:#1a1a1a;--sub:#6b7280;--border:rgba(0,0,0,0.08);--r:14px;--rs:8px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-header{background:var(--white);border-bottom:1px solid var(--border);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.header-left{display:flex;align-items:center;gap:12px}
-.logo-mark{width:32px;height:32px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center}
-.logo-mark svg{width:18px;height:18px;fill:white}
-.header-title{font-size:15px;font-weight:700;color:var(--text)}
-.header-sub{font-size:11px;color:var(--text-sub);margin-top:1px}
+
+/* HEADER */
+header{background:var(--white);border-bottom:1px solid var(--border);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.logo{width:32px;height:32px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo svg{width:18px;height:18px;fill:white}
+.hd-left{display:flex;align-items:center;gap:12px}
+.hd-title{font-size:15px;font-weight:700}
+.hd-sub{font-size:11px;color:var(--sub)}
 .badge{font-size:11px;background:var(--green-light);color:var(--green-dark);padding:4px 10px;border-radius:20px;font-weight:500}
+
+/* MAIN */
 main{max-width:960px;margin:0 auto;padding:28px 20px}
-.search-row{display:flex;gap:10px;margin-bottom:16px}
-.search-wrap{flex:1;position:relative}
-.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;opacity:0.4}
-input[type=text]{width:100%;padding:10px 14px 10px 38px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:'Noto Sans JP',sans-serif;background:var(--white);color:var(--text);outline:none;transition:border-color .15s}
-input[type=text]:focus{border-color:var(--green-mid)}
-.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
-.f-btn{padding:6px 13px;border-radius:20px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--white);color:var(--text-sub);font-family:'Noto Sans JP',sans-serif;font-weight:500;transition:all .15s}
-.f-btn:hover{border-color:var(--green-mid)}
-.f-btn.active{background:var(--green-light);color:var(--green-dark);border-color:var(--green-mid)}
-.count-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
-.count-chip{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 14px;font-size:12px;color:var(--text-sub)}
-.count-chip strong{display:block;font-size:16px;color:var(--text);font-weight:700}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
-.card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all .18s}
-.card:hover{border-color:var(--green-mid);transform:translateY(-2px);box-shadow:0 6px 20px rgba(29,158,117,.1)}
-.card-img{width:100%;height:130px;object-fit:cover;display:block;background:var(--bg)}
-.card-img-placeholder{width:100%;height:130px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:28px;font-family:'DM Sans',sans-serif}
-.card-body{padding:14px}
-.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.cat-pill{font-size:10px;padding:3px 7px;border-radius:10px;font-weight:500;white-space:nowrap}
-.card-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px}
-.card-role{font-size:11px;color:var(--text-sub);margin-bottom:10px;line-height:1.5}
-.tag-row{display:flex;flex-wrap:wrap;gap:3px}
-.tag{font-size:10px;padding:3px 7px;border-radius:8px}
-.det-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center;padding:20px;pointer-events:none}
-.det-overlay.open{display:flex;pointer-events:auto}
-.det-box{background:var(--white);border-radius:20px;max-width:540px;width:100%;max-height:88vh;overflow-y:auto;position:relative}
-.det-hero{width:100%;height:200px;object-fit:cover;display:block;border-radius:20px 20px 0 0}
-.det-hero-placeholder{width:100%;height:200px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:48px;font-family:'DM Sans',sans-serif;border-radius:20px 20px 0 0}
-.det-close{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.9);border:none;cursor:pointer;font-size:18px;color:var(--text);width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;backdrop-filter:blur(4px)}
-.det-content{padding:20px 24px 28px}
-.det-name{font-size:20px;font-weight:700;color:var(--text);margin-bottom:3px}
-.det-role{font-size:13px;color:var(--text-sub);margin-bottom:8px}
-.sec-label{font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--text-sub);margin:16px 0 6px;text-transform:uppercase}
-.bio-text{font-size:14px;color:var(--text);line-height:1.8}
-.genre-card{background:var(--bg);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px}
-.genre-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
-.genre-desc{font-size:12px;color:var(--text-sub);line-height:1.6}
-.apply-btn{display:block;width:100%;margin-top:18px;padding:13px;background:var(--green);color:white;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:background .15s}
-.apply-btn:hover{background:var(--green-dark)}
-.notice{background:#E6F1FB;border-radius:var(--radius-sm);padding:10px 13px;font-size:12px;color:#185FA5;margin-top:10px;line-height:1.6}
-.empty{text-align:center;padding:48px 0;color:var(--text-sub);font-size:14px}
-.loading{text-align:center;padding:48px 0;color:var(--text-sub);font-size:14px}
-.error-box{background:#FCEBEB;border-radius:var(--radius-sm);padding:14px;color:#A32D2D;font-size:13px;margin-bottom:16px;line-height:1.6}
-.ai-search-box{background:linear-gradient(135deg,#E1F5EE 0%,#E6F1FB 100%);border:1.5px solid var(--green-mid);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px}
-.ai-search-header{display:flex;align-items:center;gap:8px}
+
+/* COUNTS */
+.counts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.chip{background:var(--white);border:1px solid var(--border);border-radius:var(--rs);padding:8px 14px;font-size:12px;color:var(--sub)}
+.chip strong{display:block;font-size:16px;color:var(--text);font-weight:700}
+
+/* SEARCH */
+.search-wrap{position:relative;margin-bottom:12px}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;opacity:.4;pointer-events:none}
+#search{width:100%;padding:10px 14px 10px 38px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:14px;font-family:'Noto Sans JP',sans-serif;background:var(--white);color:var(--text);outline:none}
+#search:focus{border-color:var(--green-mid)}
+
+/* AI BOX */
+.ai-box{background:linear-gradient(135deg,#E1F5EE,#E6F1FB);border:1.5px solid var(--green-mid);border-radius:var(--r);padding:14px 18px;margin-bottom:20px}
+.ai-head{display:flex;align-items:center;gap:8px}
 .ai-badge{background:var(--green);color:white;font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px}
-.ai-title{font-size:14px;font-weight:500;color:var(--green-dark);flex:1}
-.ai-toggle-btn{background:none;border:none;cursor:pointer;font-size:12px;color:var(--green-dark);font-family:'Noto Sans JP',sans-serif;padding:4px 8px}
-.ai-search-body{margin-top:12px}
-.ai-search-body textarea{width:100%;padding:10px 12px;border:1.5px solid var(--green-mid);border-radius:var(--radius-sm);font-size:14px;font-family:'Noto Sans JP',sans-serif;background:var(--white);color:var(--text);outline:none;resize:vertical;margin-bottom:8px}
-.ai-search-body textarea:focus{border-color:var(--green)}
-.ai-submit-btn{padding:10px 20px;background:var(--green);color:white;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:background .15s;width:100%}
-.ai-submit-btn:hover{background:var(--green-dark)}
-.ai-submit-btn:disabled{background:#9CA3AF;cursor:not-allowed}
-.ai-result-box{margin-top:14px;background:var(--white);border-radius:var(--radius-sm);padding:16px;border:1px solid var(--border)}
-.ai-result-title{font-size:12px;font-weight:700;color:var(--text-sub);margin-bottom:10px;letter-spacing:.05em}
-.ai-rec-card{display:flex;align-items:flex-start;gap:12px;padding:10px;background:var(--bg);border-radius:var(--radius-sm);margin-bottom:8px;cursor:pointer;transition:background .15s}
-.ai-rec-card:hover{background:var(--green-light)}
-.ai-rec-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0}
-.ai-rec-body{flex:1}
-.ai-rec-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px}
-.ai-rec-reason{font-size:12px;color:var(--text-sub);line-height:1.5}
-.ai-loading{text-align:center;padding:16px;color:var(--text-sub);font-size:14px}
-.hidden{display:none}
-@media(max-width:600px){.grid{grid-template-columns:1fr 1fr}.count-row{display:none}main{padding:16px 14px}}
+.ai-label{font-size:14px;font-weight:500;color:var(--green-dark);flex:1}
+.ai-toggle{background:none;border:none;cursor:pointer;font-size:12px;color:var(--green-dark);font-family:'Noto Sans JP',sans-serif;padding:4px 8px}
+.ai-body{margin-top:12px;display:none}
+.ai-body.open{display:block}
+.ai-body textarea{width:100%;padding:10px 12px;border:1.5px solid var(--green-mid);border-radius:var(--rs);font-size:14px;font-family:'Noto Sans JP',sans-serif;background:var(--white);color:var(--text);outline:none;resize:vertical;margin-bottom:8px;display:block}
+.ai-body textarea:focus{border-color:var(--green)}
+.ai-btn{width:100%;padding:10px 20px;background:var(--green);color:white;border:none;border-radius:var(--rs);font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans JP',sans-serif}
+.ai-btn:hover{background:var(--green-dark)}
+.ai-btn:disabled{background:#9CA3AF;cursor:not-allowed}
+.ai-result{margin-top:12px}
+.ai-result-inner{background:var(--white);border-radius:var(--rs);padding:16px;border:1px solid var(--border)}
+.ai-result-hd{font-size:12px;font-weight:700;color:var(--sub);margin-bottom:10px;letter-spacing:.05em}
+.ai-rec{display:flex;align-items:flex-start;gap:12px;padding:10px;background:var(--bg);border-radius:var(--rs);margin-bottom:8px;cursor:pointer}
+.ai-rec:hover{background:var(--green-light)}
+.ai-rec-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0}
+.ai-rec-name{font-size:14px;font-weight:700;margin-bottom:2px}
+.ai-rec-reason{font-size:12px;color:var(--sub);line-height:1.5}
+
+/* FILTERS */
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.f-btn{padding:6px 13px;border-radius:20px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--white);color:var(--sub);font-family:'Noto Sans JP',sans-serif;font-weight:500}
+.f-btn.active{background:var(--green-light);color:var(--green-dark);border-color:var(--green-mid)}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .18s}
+.card:hover{border-color:var(--green-mid);transform:translateY(-2px);box-shadow:0 6px 20px rgba(29,158,117,.1)}
+.card-img{width:100%;height:130px;object-fit:cover;display:block}
+.card-ph{width:100%;height:130px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:28px;font-family:'DM Sans',sans-serif}
+.card-body{padding:14px}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;gap:6px}
+.card-name{font-size:14px;font-weight:700;flex:1}
+.pill{font-size:10px;padding:3px 7px;border-radius:10px;font-weight:500;white-space:nowrap;flex-shrink:0}
+.card-role{font-size:11px;color:var(--sub);margin-bottom:8px;line-height:1.4}
+.tags{display:flex;flex-wrap:wrap;gap:3px}
+.tag{font-size:10px;padding:3px 7px;border-radius:8px}
+
+/* DETAIL MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.det-box{background:var(--white);border-radius:20px;max-width:540px;width:100%;max-height:88vh;overflow-y:auto;position:relative}
+.det-hero{width:100%;height:200px;object-fit:cover;border-radius:20px 20px 0 0;display:block}
+.det-ph{width:100%;height:200px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:48px;font-family:'DM Sans',sans-serif;border-radius:20px 20px 0 0}
+.det-close{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.9);border:none;cursor:pointer;font-size:18px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%}
+.det-content{padding:20px 24px 28px}
+.det-name{font-size:20px;font-weight:700;margin-bottom:3px}
+.det-role{font-size:13px;color:var(--sub);margin-bottom:8px}
+.sec-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--sub);margin:16px 0 6px;text-transform:uppercase}
+.bio{font-size:14px;line-height:1.8}
+.genre{background:var(--bg);border-radius:var(--rs);padding:12px;margin-bottom:8px}
+.genre-t{font-size:13px;font-weight:700;margin-bottom:4px}
+.genre-d{font-size:12px;color:var(--sub);line-height:1.6}
+.apply-btn{display:block;width:100%;margin-top:18px;padding:13px;background:var(--green);color:white;border:none;border-radius:var(--rs);font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans JP',sans-serif}
+.apply-btn:hover{background:var(--green-dark)}
+.notice{background:#E6F1FB;border-radius:var(--rs);padding:10px 13px;font-size:12px;color:#185FA5;margin-top:10px;line-height:1.6}
+
+/* MISC */
+.msg{text-align:center;padding:40px 0;color:var(--sub);font-size:14px}
+.err{background:#FCEBEB;border-radius:var(--rs);padding:14px;color:#A32D2D;font-size:13px;margin-bottom:16px;line-height:1.6}
+
+@media(max-width:600px){.grid{grid-template-columns:1fr 1fr}.counts{display:none}main{padding:16px 14px}}
 </style>
 </head>
 <body>
+
 <header>
-  <div class="header-left">
-    <div class="logo-mark">
-      <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
-    </div>
+  <div class="hd-left">
+    <div class="logo"><svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg></div>
     <div>
-      <div class="header-title">探究人材データベース</div>
-      <div class="header-sub">茨城県立竹園高校</div>
+      <div class="hd-title">探究人材データベース</div>
+      <div class="hd-sub">茨城県立竹園高校</div>
     </div>
   </div>
   <span class="badge" id="total-badge">読み込み中...</span>
 </header>
 
 <main>
-  <div id="error-area"></div>
-  <div class="count-row" id="count-row"></div>
-  <div class="search-row">
-    <div class="search-wrap">
-      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" id="search" placeholder="名前・テーマ・キーワードで検索...">
-    </div>
+  <div id="err-area"></div>
+  <div class="counts" id="counts"></div>
+
+  <div class="search-wrap">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="search" placeholder="名前・テーマ・キーワードで検索...">
   </div>
-  <div class="ai-search-box" id="ai-search-box">
-    <div class="ai-search-header">
+
+  <div class="ai-box">
+    <div class="ai-head">
       <span class="ai-badge">✨ AI</span>
-      <span class="ai-title">こんな人を探しています…と相談する</span>
-      <button class="ai-toggle-btn" onclick="toggleAiSearch()" id="ai-toggle-btn">開く ▼</button>
+      <span class="ai-label">こんな人いませんか？とAIに相談する</span>
+      <button class="ai-toggle" id="ai-toggle" onclick="toggleAI()">開く ▼</button>
     </div>
-    <div class="ai-search-body hidden" id="ai-search-body">
-      <textarea id="ai-query" placeholder="例）環境問題に興味があって、将来NPOで働きたいと思っています。どんな人に話を聞けばいいですか？" rows="3"></textarea>
-      <button class="ai-submit-btn" onclick="askAI()" id="ai-submit-btn">AIに相談する</button>
+    <div class="ai-body" id="ai-body">
+      <textarea id="ai-query" rows="3" placeholder="例）環境問題に興味があって、将来NPOで働きたいと思っています。どんな人に話を聞けばいいですか？"></textarea>
+      <button class="ai-btn" id="ai-btn" onclick="askAI()">AIに相談する</button>
       <div id="ai-result"></div>
     </div>
   </div>
+
   <div class="filters">
     <button class="f-btn active" onclick="setFilter('all',this)">すべて</button>
     <button class="f-btn" onclick="setFilter('ワオフル伴走先生',this)">ワオフル伴走先生</button>
@@ -132,259 +143,231 @@ input[type=text]:focus{border-color:var(--green-mid)}
     <button class="f-btn" onclick="setFilter('大学・研究',this)">大学・研究</button>
     <button class="f-btn" onclick="setFilter('PTA・保護者',this)">PTA・保護者</button>
   </div>
-  <div id="grid-area" class="grid"><div class="loading">データを読み込み中...</div></div>
+
+  <div class="grid" id="grid"><div class="msg">データを読み込み中...</div></div>
 </main>
 
-<div class="det-overlay" id="overlay" onclick="closeDetail(event)">
+<div class="overlay" id="overlay" onclick="closeOverlay(event)">
   <div class="det-box" id="det-box"></div>
 </div>
 
 <script>
 const SHEET_ID = '1G2tlHDRHa37-eMofffcYXqIskpf4xfghlhz066uW5XU';
 const SHEET_NAME = '登録データ';
-const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
+const API = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
 
-const CAT_STYLE = {
+const CAT = {
   'ワオフル伴走先生':{bg:'#E1F5EE',tc:'#0F6E56'},
   '竹園OB・OG':      {bg:'#E6F1FB',tc:'#185FA5'},
   '地域・NPO':       {bg:'#FAEEDA',tc:'#854F0B'},
   '大学・研究':      {bg:'#EEEDFE',tc:'#3C3489'},
   'PTA・保護者':     {bg:'#FBEAF0',tc:'#993556'},
 };
-const DEFAULT_STYLE = {bg:'#F1EFE8',tc:'#5F5E5A'};
+const DEF = {bg:'#F1EFE8',tc:'#5F5E5A'};
 
-let allData = [];
-let activeFilter = 'all';
-let searchQuery = '';
+let data=[], filt='all', q='';
 
-function getStyle(cat){ return CAT_STYLE[cat] || DEFAULT_STYLE; }
-function initials(name){ return (name||'?').replace(/[\s　]/g,'').slice(0,2); }
+const s = c => CAT[c]||DEF;
+const ini = n => (n||'?').replace(/[\s　]/g,'').slice(0,2);
 
-function toDirectUrl(url) {
-  if (!url) return '';
-  // /d/XXXX 形式
+function driveUrl(url){
+  if(!url) return '';
   const m1 = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-  if (m1) return `https://drive.google.com/uc?export=view&id=${m1[1]}`;
-  // open?id=XXXX 形式
+  if(m1) return `https://drive.google.com/uc?export=view&id=${m1[1]}`;
   const m2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-  if (m2) return `https://drive.google.com/uc?export=view&id=${m2[1]}`;
+  if(m2) return `https://drive.google.com/uc?export=view&id=${m2[1]}`;
   return url;
 }
 
-async function loadData(){
-  try {
-    const res = await fetch(API_URL);
-    const text = await res.text();
-    const json = JSON.parse(text.replace(/^[^(]+\(/, '').replace(/\);?\s*$/, ''));
-    const rows = json.table.rows;
-    const cols = json.table.cols.map(c => c.label);
-
+async function load(){
+  try{
+    const r = await fetch(API);
+    const t = await r.text();
+    const j = JSON.parse(t.replace(/^[^(]+\(/,'').replace(/\);?\s*$/,''));
+    const cols = j.table.cols.map(c=>c.label);
+    const get = (row,i) => i>=0&&row.c[i] ? String(row.c[i].v||'').trim() : '';
     const idx = {
-      name:  cols.findIndex(c => c.includes('表示名')),
-      cat:   cols.findIndex(c => c.includes('カテゴリ')),
-      role:  cols.findIndex(c => c.includes('肩書き')),
-      topics:cols.findIndex(c => c.includes('得意テーマ')),
-      bio:   cols.findIndex(c => c.includes('自己紹介')),
-      g1t:   cols.findIndex(c => c.includes('ジャンル①タイトル')),
-      g1d:   cols.findIndex(c => c.includes('ジャンル①詳細')),
-      g2t:   cols.findIndex(c => c.includes('ジャンル②タイトル')),
-      g2d:   cols.findIndex(c => c.includes('ジャンル②詳細')),
-      photo: cols.findIndex(c => c.includes('写真') || c.includes('photo') || c.includes('画像')),
+      name:  cols.findIndex(c=>c.includes('表示名')),
+      cat:   cols.findIndex(c=>c.includes('カテゴリ')),
+      role:  cols.findIndex(c=>c.includes('肩書き')),
+      topics:cols.findIndex(c=>c.includes('得意テーマ')),
+      bio:   cols.findIndex(c=>c.includes('自己紹介')),
+      g1t:   cols.findIndex(c=>c.includes('ジャンル①タイトル')),
+      g1d:   cols.findIndex(c=>c.includes('ジャンル①詳細')),
+      g2t:   cols.findIndex(c=>c.includes('ジャンル②タイトル')),
+      g2d:   cols.findIndex(c=>c.includes('ジャンル②詳細')),
+      photo: cols.findIndex(c=>c.includes('写真')||c.includes('photo')||c.includes('画像')),
     };
-
-    const get = (row, i) => i >= 0 && row.c[i] ? String(row.c[i].v || '').trim() : '';
-
-    allData = rows.map((r, i) => ({
-      id: String(i),
-      name:   get(r, idx.name),
-      cat:    get(r, idx.cat),
-      role:   get(r, idx.role),
-      topics: get(r, idx.topics).split(/[,、，]/).map(s=>s.trim()).filter(Boolean),
-      bio:    get(r, idx.bio),
-      g1t:    get(r, idx.g1t),
-      g1d:    get(r, idx.g1d),
-      g2t:    get(r, idx.g2t),
-      g2d:    get(r, idx.g2d),
-      photo:  toDirectUrl(get(r, idx.photo)),
-    })).filter(p => p.name);
-
+    data = j.table.rows.map((r,i)=>({
+      id:    String(i),
+      name:  get(r,idx.name),
+      cat:   get(r,idx.cat),
+      role:  get(r,idx.role),
+      topics:get(r,idx.topics).split(/[,、，]/).map(x=>x.trim()).filter(Boolean),
+      bio:   get(r,idx.bio),
+      g1t:   get(r,idx.g1t),
+      g1d:   get(r,idx.g1d),
+      g2t:   get(r,idx.g2t),
+      g2d:   get(r,idx.g2d),
+      photo: driveUrl(get(r,idx.photo)),
+    })).filter(p=>p.name);
     renderCounts();
     renderGrid();
-  } catch(e) {
-    console.error(e);
-    document.getElementById('error-area').innerHTML =
-      `<div class="error-box">データの読み込みに失敗しました。スプレッドシートの共有設定を「リンクを知っている全員・閲覧者」にしてから再読み込みしてください。<br><small>${e.message}</small></div>`;
-    document.getElementById('grid-area').innerHTML = '';
+  }catch(e){
+    document.getElementById('err-area').innerHTML =
+      `<div class="err">データの読み込みに失敗しました。スプレッドシートの共有設定を確認してください。<br><small>${e.message}</small></div>`;
+    document.getElementById('grid').innerHTML = '';
     document.getElementById('total-badge').textContent = 'エラー';
   }
 }
 
-function getFiltered(){
-  return allData.filter(p => {
-    const catOk = activeFilter === 'all' || p.cat === activeFilter;
-    const q = searchQuery;
-    const qOk = !q || p.name.includes(q) || p.topics.join(' ').includes(q) ||
-                p.role.includes(q) || p.bio.includes(q);
-    return catOk && qOk;
+function filtered(){
+  return data.filter(p=>{
+    const co = filt==='all'||p.cat===filt;
+    const qo = !q||[p.name,p.role,p.bio,...p.topics].join(' ').includes(q);
+    return co&&qo;
   });
 }
 
 function renderCounts(){
-  document.getElementById('total-badge').textContent = `${allData.length}名登録中`;
-  document.getElementById('count-row').innerHTML =
-    `<div class="count-chip"><strong>${allData.length}</strong>総登録数</div>` +
-    Object.keys(CAT_STYLE).map(c =>
-      `<div class="count-chip"><strong>${allData.filter(p=>p.cat===c).length}</strong>${c}</div>`
-    ).join('');
+  document.getElementById('total-badge').textContent = `${data.length}名登録中`;
+  document.getElementById('counts').innerHTML =
+    `<div class="chip"><strong>${data.length}</strong>総登録数</div>`+
+    Object.keys(CAT).map(c=>`<div class="chip"><strong>${data.filter(p=>p.cat===c).length}</strong>${c}</div>`).join('');
 }
 
 function renderGrid(){
-  const f = getFiltered();
-  const area = document.getElementById('grid-area');
-  if(!f.length){ area.innerHTML='<div class="empty">該当する人材が見つかりませんでした</div>'; return; }
-  area.className = 'grid';
-  area.innerHTML = f.map(p => {
-    const s = getStyle(p.cat);
-    const imgHtml = p.photo
+  const f = filtered();
+  const g = document.getElementById('grid');
+  if(!f.length){g.innerHTML='<div class="msg">該当する人材が見つかりませんでした</div>';return;}
+  g.innerHTML = f.map(p=>{
+    const st = s(p.cat);
+    const img = p.photo
       ? `<img class="card-img" src="${p.photo}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
-        + `<div class="card-img-placeholder" style="background:${s.bg};color:${s.tc};display:none">${initials(p.name)}</div>`
-      : `<div class="card-img-placeholder" style="background:${s.bg};color:${s.tc}">${initials(p.name)}</div>`;
-    return `<div class="card" onclick="openDetail('${p.id}')">
-      ${imgHtml}
+        +`<div class="card-ph" style="background:${st.bg};color:${st.tc};display:none">${ini(p.name)}</div>`
+      : `<div class="card-ph" style="background:${st.bg};color:${st.tc}">${ini(p.name)}</div>`;
+    return `<div class="card" onclick="openDet('${p.id}')">
+      ${img}
       <div class="card-body">
         <div class="card-top">
           <div class="card-name">${p.name}</div>
-          <span class="cat-pill" style="background:${s.bg};color:${s.tc}">${p.cat||'未分類'}</span>
+          <span class="pill" style="background:${st.bg};color:${st.tc}">${p.cat||'未分類'}</span>
         </div>
         <div class="card-role">${p.role}</div>
-        <div class="tag-row">${p.topics.map(t=>`<span class="tag" style="background:${s.bg};color:${s.tc}">${t}</span>`).join('')}</div>
+        <div class="tags">${p.topics.map(t=>`<span class="tag" style="background:${st.bg};color:${st.tc}">${t}</span>`).join('')}</div>
       </div>
     </div>`;
   }).join('');
 }
 
-function openDetail(id){
-  const p = allData.find(x => x.id === id); if(!p) return;
-  const s = getStyle(p.cat);
-  const heroHtml = p.photo
+function openDet(id){
+  const p = data.find(x=>x.id===id); if(!p) return;
+  const st = s(p.cat);
+  const hero = p.photo
     ? `<img class="det-hero" src="${p.photo}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
-      + `<div class="det-hero-placeholder" style="background:${s.bg};color:${s.tc};display:none">${initials(p.name)}</div>`
-    : `<div class="det-hero-placeholder" style="background:${s.bg};color:${s.tc}">${initials(p.name)}</div>`;
+      +`<div class="det-ph" style="background:${st.bg};color:${st.tc};display:none">${ini(p.name)}</div>`
+    : `<div class="det-ph" style="background:${st.bg};color:${st.tc}">${ini(p.name)}</div>`;
   document.getElementById('det-box').innerHTML = `
-    ${heroHtml}
+    ${hero}
     <button class="det-close" onclick="document.getElementById('overlay').classList.remove('open')">✕</button>
     <div class="det-content">
       <div class="det-name">${p.name}</div>
       <div class="det-role">${p.role}</div>
-      <span class="cat-pill" style="background:${s.bg};color:${s.tc}">${p.cat}</span>
-      <div class="tag-row" style="margin-top:8px">${p.topics.map(t=>`<span class="tag" style="background:${s.bg};color:${s.tc}">${t}</span>`).join('')}</div>
-      <div class="sec-label">自己紹介</div>
-      <p class="bio-text">${p.bio}</p>
-      ${p.g1t ? `<div class="sec-label">得意ジャンル</div>
-        <div class="genre-card"><div class="genre-title">${p.g1t}</div><div class="genre-desc">${p.g1d}</div></div>` : ''}
-      ${p.g2t ? `<div class="genre-card"><div class="genre-title">${p.g2t}</div><div class="genre-desc">${p.g2d}</div></div>` : ''}
+      <span class="pill" style="background:${st.bg};color:${st.tc}">${p.cat}</span>
+      <div class="tags" style="margin-top:8px">${p.topics.map(t=>`<span class="tag" style="background:${st.bg};color:${st.tc}">${t}</span>`).join('')}</div>
+      <div class="sec-lbl">自己紹介</div>
+      <p class="bio">${p.bio}</p>
+      ${p.g1t?`<div class="sec-lbl">得意ジャンル</div><div class="genre"><div class="genre-t">${p.g1t}</div><div class="genre-d">${p.g1d}</div></div>`:''}
+      ${p.g2t?`<div class="genre"><div class="genre-t">${p.g2t}</div><div class="genre-d">${p.g2d}</div></div>`:''}
       <button class="apply-btn" onclick="alert('担当の先生に「${p.name}さんと話したい」と伝えてください！')">担当の先生に申請する</button>
       <div class="notice">面談の日程調整は担当教員を通じてワオフルが行います。申請後1週間以内に連絡があります。</div>
-    </div>
-  `;
+    </div>`;
   document.getElementById('overlay').classList.add('open');
 }
 
-function closeDetail(e){
-  if(e.target === document.getElementById('overlay'))
+function closeOverlay(e){
+  if(e.target===document.getElementById('overlay'))
     document.getElementById('overlay').classList.remove('open');
 }
 
-function setFilter(cat, btn){
-  activeFilter = cat;
-  document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+function setFilter(cat,btn){
+  filt=cat;
+  document.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('search').value = '';
-  searchQuery = '';
+  document.getElementById('search').value=''; q='';
   renderGrid();
 }
 
-document.getElementById('search').addEventListener('input', e => {
-  searchQuery = e.target.value;
-  renderGrid();
+document.getElementById('search').addEventListener('input',e=>{
+  q=e.target.value; renderGrid();
 });
 
-function toggleAiSearch(){
-  const body = document.getElementById('ai-search-body');
-  const btn = document.getElementById('ai-toggle-btn');
-  body.classList.toggle('hidden');
-  btn.textContent = body.classList.contains('hidden') ? '開く ▼' : '閉じる ▲';
+function toggleAI(){
+  const body = document.getElementById('ai-body');
+  const btn = document.getElementById('ai-toggle');
+  const isOpen = body.classList.toggle('open');
+  btn.textContent = isOpen ? '閉じる ▲' : '開く ▼';
 }
 
 async function askAI(){
   const query = document.getElementById('ai-query').value.trim();
   if(!query) return;
-  const btn = document.getElementById('ai-submit-btn');
-  const resultDiv = document.getElementById('ai-result');
-  btn.disabled = true;
-  btn.textContent = '考え中...';
-  resultDiv.innerHTML = '<div class="ai-loading">✨ AIが人材を検索しています...</div>';
+  const btn = document.getElementById('ai-btn');
+  const res = document.getElementById('ai-result');
+  btn.disabled=true; btn.textContent='考え中...';
+  res.innerHTML='<div class="msg" style="padding:16px">✨ AIが探しています...</div>';
 
-  const peopleList = allData.map(p =>
-    `【${p.name}】カテゴリ:${p.cat} 役職:${p.role} 得意テーマ:${p.topics.join('/')} 自己紹介:${p.bio} ジャンル:${p.g1t}${p.g2t?'/'+p.g2t:''}`
-  ).join('
-');
+  const list = data.map(p=>
+    `【${p.name}】カテゴリ:${p.cat} 役職:${p.role} テーマ:${p.topics.join('/')} 自己紹介:${p.bio} ジャンル:${p.g1t}${p.g2t?'/'+p.g2t:''}`
+  ).join('\n');
 
   const prompt = `あなたは高校生の探究学習をサポートするAIアシスタントです。
-以下の外部人材リストの中から、高校生の相談内容に最もマッチする人材を最大3名選んでください。
+以下の外部人材リストから、高校生の相談に最もマッチする人材を最大3名選んでください。
 
 【登録人材一覧】
-${peopleList}
+${list}
 
 【高校生からの相談】
 ${query}
 
 以下のJSON形式のみで回答してください。他のテキストは不要です。
-{"recommendations":[{"name":"人材名","reason":"この人をおすすめする理由を2文で"}]}`;
+{"recommendations":[{"name":"人材名","reason":"おすすめ理由を2文で"}]}`;
 
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{role: 'user', content: prompt}]
-      })
+  try{
+    const r = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
     });
-    const data = await res.json();
-    const text = data.content[0].text;
-    const clean = text.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(clean);
+    const d = await r.json();
+    const txt = d.content[0].text.replace(/```json|```/g,'').trim();
+    const parsed = JSON.parse(txt);
     const recs = parsed.recommendations;
-
-    if(!recs || !recs.length){
-      resultDiv.innerHTML = '<div class="ai-result-box"><p style="font-size:14px;color:var(--text-sub)">マッチする人材が見つかりませんでした。別の言葉で試してみてください。</p></div>';
+    if(!recs||!recs.length){
+      res.innerHTML='<div class="ai-result-inner"><p style="font-size:14px;color:var(--sub)">マッチする人材が見つかりませんでした。別の言葉で試してみてください。</p></div>';
     } else {
-      resultDiv.innerHTML = `<div class="ai-result-box">
-        <div class="ai-result-title">✨ AIのおすすめ ${recs.length}名</div>
-        ${recs.map(r => {
-          const p = allData.find(x => x.name === r.name);
-          if(!p) return '';
-          const s = getStyle(p.cat);
-          return `<div class="ai-rec-card" onclick="openDetail('${p.id}')">
-            <div class="ai-rec-avatar" style="background:${s.bg};color:${s.tc}">${initials(p.name)}</div>
-            <div class="ai-rec-body">
-              <div class="ai-rec-name">${p.name} <span style="font-size:11px;font-weight:400;color:var(--text-sub)">${p.role}</span></div>
-              <div class="ai-rec-reason">${r.reason}</div>
+      res.innerHTML=`<div class="ai-result-inner">
+        <div class="ai-result-hd">✨ AIのおすすめ ${recs.length}名</div>
+        ${recs.map(rec=>{
+          const p=data.find(x=>x.name===rec.name); if(!p) return '';
+          const st=s(p.cat);
+          return `<div class="ai-rec" onclick="openDet('${p.id}')">
+            <div class="ai-rec-av" style="background:${st.bg};color:${st.tc}">${ini(p.name)}</div>
+            <div>
+              <div class="ai-rec-name">${p.name} <span style="font-size:11px;font-weight:400;color:var(--sub)">${p.role}</span></div>
+              <div class="ai-rec-reason">${rec.reason}</div>
             </div>
           </div>`;
         }).join('')}
       </div>`;
     }
-  } catch(e) {
-    resultDiv.innerHTML = '<div class="ai-result-box"><p style="font-size:14px;color:#A32D2D">エラーが発生しました。もう一度試してください。</p></div>';
+  }catch(e){
+    res.innerHTML='<div class="ai-result-inner"><p style="font-size:14px;color:#A32D2D">エラーが発生しました。もう一度試してください。</p></div>';
   }
-  btn.disabled = false;
-  btn.textContent = 'AIに相談する';
+  btn.disabled=false; btn.textContent='AIに相談する';
 }
 
-loadData();
+load();
 </script>
 </body>
 </html>
