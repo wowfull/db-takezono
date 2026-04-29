@@ -65,6 +65,27 @@ input[type=text]:focus{border-color:var(--green-mid)}
 .empty{text-align:center;padding:48px 0;color:var(--text-sub);font-size:14px}
 .loading{text-align:center;padding:48px 0;color:var(--text-sub);font-size:14px}
 .error-box{background:#FCEBEB;border-radius:var(--radius-sm);padding:14px;color:#A32D2D;font-size:13px;margin-bottom:16px;line-height:1.6}
+.ai-search-box{background:linear-gradient(135deg,#E1F5EE 0%,#E6F1FB 100%);border:1.5px solid var(--green-mid);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px}
+.ai-search-header{display:flex;align-items:center;gap:8px}
+.ai-badge{background:var(--green);color:white;font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px}
+.ai-title{font-size:14px;font-weight:500;color:var(--green-dark);flex:1}
+.ai-toggle-btn{background:none;border:none;cursor:pointer;font-size:12px;color:var(--green-dark);font-family:'Noto Sans JP',sans-serif;padding:4px 8px}
+.ai-search-body{margin-top:12px}
+.ai-search-body textarea{width:100%;padding:10px 12px;border:1.5px solid var(--green-mid);border-radius:var(--radius-sm);font-size:14px;font-family:'Noto Sans JP',sans-serif;background:var(--white);color:var(--text);outline:none;resize:vertical;margin-bottom:8px}
+.ai-search-body textarea:focus{border-color:var(--green)}
+.ai-submit-btn{padding:10px 20px;background:var(--green);color:white;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:background .15s;width:100%}
+.ai-submit-btn:hover{background:var(--green-dark)}
+.ai-submit-btn:disabled{background:#9CA3AF;cursor:not-allowed}
+.ai-result-box{margin-top:14px;background:var(--white);border-radius:var(--radius-sm);padding:16px;border:1px solid var(--border)}
+.ai-result-title{font-size:12px;font-weight:700;color:var(--text-sub);margin-bottom:10px;letter-spacing:.05em}
+.ai-rec-card{display:flex;align-items:flex-start;gap:12px;padding:10px;background:var(--bg);border-radius:var(--radius-sm);margin-bottom:8px;cursor:pointer;transition:background .15s}
+.ai-rec-card:hover{background:var(--green-light)}
+.ai-rec-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0}
+.ai-rec-body{flex:1}
+.ai-rec-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px}
+.ai-rec-reason{font-size:12px;color:var(--text-sub);line-height:1.5}
+.ai-loading{text-align:center;padding:16px;color:var(--text-sub);font-size:14px}
+.hidden{display:none}
 @media(max-width:600px){.grid{grid-template-columns:1fr 1fr}.count-row{display:none}main{padding:16px 14px}}
 </style>
 </head>
@@ -89,6 +110,18 @@ input[type=text]:focus{border-color:var(--green-mid)}
     <div class="search-wrap">
       <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       <input type="text" id="search" placeholder="名前・テーマ・キーワードで検索...">
+    </div>
+  </div>
+  <div class="ai-search-box" id="ai-search-box">
+    <div class="ai-search-header">
+      <span class="ai-badge">✨ AI</span>
+      <span class="ai-title">こんな人を探しています…と相談する</span>
+      <button class="ai-toggle-btn" onclick="toggleAiSearch()" id="ai-toggle-btn">開く ▼</button>
+    </div>
+    <div class="ai-search-body hidden" id="ai-search-body">
+      <textarea id="ai-query" placeholder="例）環境問題に興味があって、将来NPOで働きたいと思っています。どんな人に話を聞けばいいですか？" rows="3"></textarea>
+      <button class="ai-submit-btn" onclick="askAI()" id="ai-submit-btn">AIに相談する</button>
+      <div id="ai-result"></div>
     </div>
   </div>
   <div class="filters">
@@ -275,6 +308,81 @@ document.getElementById('search').addEventListener('input', e => {
   searchQuery = e.target.value;
   renderGrid();
 });
+
+function toggleAiSearch(){
+  const body = document.getElementById('ai-search-body');
+  const btn = document.getElementById('ai-toggle-btn');
+  body.classList.toggle('hidden');
+  btn.textContent = body.classList.contains('hidden') ? '開く ▼' : '閉じる ▲';
+}
+
+async function askAI(){
+  const query = document.getElementById('ai-query').value.trim();
+  if(!query) return;
+  const btn = document.getElementById('ai-submit-btn');
+  const resultDiv = document.getElementById('ai-result');
+  btn.disabled = true;
+  btn.textContent = '考え中...';
+  resultDiv.innerHTML = '<div class="ai-loading">✨ AIが人材を検索しています...</div>';
+
+  const peopleList = allData.map(p =>
+    `【${p.name}】カテゴリ:${p.cat} 役職:${p.role} 得意テーマ:${p.topics.join('/')} 自己紹介:${p.bio} ジャンル:${p.g1t}${p.g2t?'/'+p.g2t:''}`
+  ).join('
+');
+
+  const prompt = `あなたは高校生の探究学習をサポートするAIアシスタントです。
+以下の外部人材リストの中から、高校生の相談内容に最もマッチする人材を最大3名選んでください。
+
+【登録人材一覧】
+${peopleList}
+
+【高校生からの相談】
+${query}
+
+以下のJSON形式のみで回答してください。他のテキストは不要です。
+{"recommendations":[{"name":"人材名","reason":"この人をおすすめする理由を2文で"}]}`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{role: 'user', content: prompt}]
+      })
+    });
+    const data = await res.json();
+    const text = data.content[0].text;
+    const clean = text.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+    const recs = parsed.recommendations;
+
+    if(!recs || !recs.length){
+      resultDiv.innerHTML = '<div class="ai-result-box"><p style="font-size:14px;color:var(--text-sub)">マッチする人材が見つかりませんでした。別の言葉で試してみてください。</p></div>';
+    } else {
+      resultDiv.innerHTML = `<div class="ai-result-box">
+        <div class="ai-result-title">✨ AIのおすすめ ${recs.length}名</div>
+        ${recs.map(r => {
+          const p = allData.find(x => x.name === r.name);
+          if(!p) return '';
+          const s = getStyle(p.cat);
+          return `<div class="ai-rec-card" onclick="openDetail('${p.id}')">
+            <div class="ai-rec-avatar" style="background:${s.bg};color:${s.tc}">${initials(p.name)}</div>
+            <div class="ai-rec-body">
+              <div class="ai-rec-name">${p.name} <span style="font-size:11px;font-weight:400;color:var(--text-sub)">${p.role}</span></div>
+              <div class="ai-rec-reason">${r.reason}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
+    }
+  } catch(e) {
+    resultDiv.innerHTML = '<div class="ai-result-box"><p style="font-size:14px;color:#A32D2D">エラーが発生しました。もう一度試してください。</p></div>';
+  }
+  btn.disabled = false;
+  btn.textContent = 'AIに相談する';
+}
 
 loadData();
 </script>
